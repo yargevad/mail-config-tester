@@ -1,0 +1,45 @@
+Installing and using this testing framework requires knowledge of the command line.
+You should be comfortable installing Perl modules using the CPAN command line tool.
+
+It's recommended to install these modules locally to your account using the local::lib module
+http://search.cpan.org/~haarg/local-lib-2.000015/lib/local/lib.pm#The_bootstrapping_technique
+
+$ wget http://search.cpan.org/CPAN/authors/id/H/HA/HAARG/local-lib-2.000015.tar.gz
+$ tar -xzf local-lib-2.000015.tar.gz
+$ cd local-lib-2.000015/
+$ perl Makefile.PL --bootstrap
+$ make test && make install
+$ echo '[ $SHLVL -eq 1 ] && eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"' >>~/.bashrc
+$ source ~/.bashrc
+
+The $SHLVL line auto-adds the directory that local::lib uses to Perl's module search path.
+
+Modules to install:
+Net::SMTPS
+MIME::Lite
+Term::ReadLine::Perl
+JSON
+Email::MIME
+Mail::IMAPClient
+Capture::Tiny
+
+$ perl -MCPAN -e shell
+cpan[1]> install JSON
+...
+cpan[2]> install Email::MIME
+...
+cpan[3]> install Mail::IMAPClient
+...
+
+There will be several dependencies that should be automatically installed for you.
+
+Once the Perl modules are installed, you can start using the tests:
+mkdir -p ~/path/to/src
+cd ~/path/to/src
+git clone https://github.com/yargevad/mail-config-tester
+cd mail-config-tester
+
+Once you've got the test toolkit checked out, and a test customer configured (see CONFIG) you're ready to start testing!
+
+$ t/DNS/01-binding-dns.t
+

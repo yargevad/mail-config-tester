@@ -1,0 +1,50 @@
+Test Framework Configuration
+
+In order to make this framework usable for multiple customers with minimal changes, a config file is used to store customer-specific information. This config file is contained in a perl hash reference, with the customer name as the top-level key. Some (redacted) config is below, as an example, with comments.
+
+~/.msys/smoke.rc:
+==========
+{
+  example_onprem => {
+    type => 'onprem',
+    api_base => 'https://onprem.example.com/api/v1',
+    link_domain => 'click.onprem.example.com',
+    api_key => '0000000000000000000000000000000000000000',
+    bindings => {
+      binding1 => {
+        headers => { 'x-binding' => 'binding1' },
+        domain => 'onprem.example.com',
+        ip => '52.21.206.89',
+      },
+    },
+  },
+
+  spe => { # SparkPost Elite
+    # https://%s.msyscloud.com/ - used as the base for api calls
+    subdomain => 'spe',
+    # authentication key
+    api_key => '0000000000000000000000000000000000000000',
+    # the domain that should be present in links
+    link_domain => 'spe.example.com',
+    # info relevant to each binding
+    bindings => {
+      # name of the binding - we use this in the x-binding header, among other things
+      notifications => {
+        # "mail from domain" for this binding
+        domain => 'notifications.example.com',
+        # expected outbound IPs for this binding
+        ips    => [qw/
+          54.149.191.235
+          54.149.191.236
+        /],
+      },
+    },
+  },
+
+  # set the client we're currently running tests for
+  _testing => 'spe',
+  # set one binding to run tests for
+  # otherwise one will be randomly selected, or all will be tested
+  # depending on the scope of the test
+  _test_binding => 'notifications',
+}
